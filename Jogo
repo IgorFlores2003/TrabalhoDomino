@@ -1,0 +1,121 @@
+package Domino.io;
+import java.util.ListResourceBundle;
+import java.util.Scanner;
+import Domino.io.domino;
+import Domino.io.ListaDupla;
+import java.util.Random;
+public class Main {
+
+    public static void main(String[]args) {
+
+        Scanner x = new Scanner(System.in);
+        ListaDupla pecasDoJogo = new ListaDupla();
+        ListaDupla listaUsuario = new ListaDupla();
+        ListaDupla listaPC = new ListaDupla();
+
+        Random aleat = new Random();
+
+            MENU();
+            int choose = LEITOR(x);
+
+            if (choose == 1) {
+                System.out.println("EMBARALHANDO PEÇAS...");
+                int number = 27;
+
+               System.out.println("DISTRIBUINDO PEÇAS...");
+               for(int i = 0; i < 28; i++) {
+                   pecasDoJogo.gerarPeca();
+               }
+               pecasDoJogo.imprimirPecas(pecasDoJogo);
+
+              if(false){
+               for (int i = 0; i < 14; i++) {
+                    int position = aleat.nextInt(0, number);
+
+                    if (listaUsuario.inicio == null) {
+                        listaUsuario.inserirInicio(pecasDoJogo.pecaNaPosicao(position));
+                        listaUsuario.fim = listaUsuario.inserirFim(pecasDoJogo.pecaNaPosicao(position));
+                        pecasDoJogo.retirarMeio(position);
+                        number--;
+                    } else {
+                        listaUsuario.fim = listaUsuario.inserirFim(pecasDoJogo.pecaNaPosicao(position));
+                        pecasDoJogo.retirarMeio(position);
+                        number--;
+                    }
+                }
+                listaPC = pecasDoJogo;
+
+                ListaDupla pecasJogadas = new ListaDupla();
+                System.out.println("O Jogo Começou: ");
+            do {
+                if (listaPC == null) {
+                    System.out.println("O PC VENCEU A PARTIDA!!!");
+                    break;
+                } else if (listaUsuario == null) {
+                    System.out.println("PARABÉNS, VOCÊ VENCEU A PARTIDA!!!");
+                    break;
+                }
+
+                if (pecasJogadas != null) {
+                    for (int count = 0; count < listaPC.tamanho; count++) {
+                        if (listaPC.pecaNaPosicao(count).lado1 == 6 && listaPC.pecaNaPosicao(count).lado2 == 6) {
+                            System.out.println("PC COMEÇA JOGANDO...");
+                            pecasJogadas.inserirFim(listaPC.pecaNaPosicao(count));
+                            listaPC.retirarMeio(count);
+                            pecasJogadas.imprimirPecas(pecasJogadas);
+                        } else if (listaUsuario.pecaNaPosicao(count).lado1 == 6 && listaUsuario.pecaNaPosicao(count).lado2 == 6) {
+                            System.out.println("VOCÊ COMEÇA JOGANDO...");
+                            pecasJogadas.inserirFim(listaUsuario.pecaNaPosicao(count));
+                            listaUsuario.retirarMeio(count);
+                            pecasJogadas.imprimirPecas(pecasJogadas);
+                        }
+                    }
+                    if (listaPC.tamanho > listaUsuario.tamanho) {
+                        System.out.println("VEZ DO ADVERSÁRIO:...");
+                        for (int i = 0; i < listaPC.tamanho; i++) {
+                            if (listaPC.pecaNaPosicao(i).lado1 == pecasJogadas.fim.peca.lado1 || listaPC.pecaNaPosicao(i).lado1 == pecasJogadas.fim.peca.lado2 || listaPC.pecaNaPosicao(i).lado2 == pecasJogadas.fim.peca.lado1 || listaPC.pecaNaPosicao(i).lado2 == pecasJogadas.fim.peca.lado2) {
+                                pecasJogadas.inserirFim(listaPC.pecaNaPosicao(i));
+                                listaPC.retirarMeio(i);
+                                pecasJogadas.imprimirPecas(pecasJogadas);
+                            }
+                        }
+                    } else {
+                        while (true) {
+                            listaUsuario.imprimirPecas(listaUsuario);
+                            System.out.println("DIGITE A POSIÇÃO DA PEÇA QUE DESEJA JOGAR: ");
+                            int pecaJogada = LEITOR(x);
+
+                            if (listaUsuario.pecaNaPosicao(pecaJogada + 1).lado1 == pecasJogadas.fim.peca.lado1 || listaUsuario.pecaNaPosicao(pecaJogada + 1).lado1 == pecasJogadas.fim.peca.lado2 || listaUsuario.pecaNaPosicao(pecaJogada + 1).lado2 == pecasJogadas.fim.peca.lado1 || listaUsuario.pecaNaPosicao(pecaJogada + 1).lado2 == pecasJogadas.fim.peca.lado2) {
+                                pecasJogadas.inserirFim(listaUsuario.pecaNaPosicao(pecaJogada));
+                                listaUsuario.retirarMeio(pecaJogada);
+                                pecasJogadas.imprimirPecas(pecasJogadas);
+                                break;
+                            } else {
+                                System.out.println("PEÇA ERRADA, ESCOLHA UMA PEÇA VÁLIDA!!!");
+                            }
+                        }
+                    }
+                }
+        } while (true);
+            }else if(choose == 0) {
+                System.out.println("OBRIGADO POR USAR A APLICAÇÃO, ATÉ A PRÓXIMA!!!");
+            }else{
+                System.out.println("OPÇÃO INVÁLIDA!!! REINICIE A APLICAÇÃO E DIGITE UMA OPÇÃO VÁLIDA!!!");
+            }}
+        }
+        public static void MENU () {
+            System.out.println("-----------------JOGO DE DOMINÓ-----------------");
+            System.out.println("1-Jogar");
+            System.out.println("0-Sair");
+            System.out.println("------------------------------------------------");
+        }
+
+
+        public static int LEITOR (Scanner x){
+            int aux = x.nextInt();
+            x.nextLine();
+            return aux;
+        }
+
+    }
+
