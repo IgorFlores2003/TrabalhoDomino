@@ -1,0 +1,153 @@
+package Domino.io;
+public class ListaDupla {
+
+    public No inicio;
+    public No fim;
+    public int i = 6;
+    public int j = 0;
+    int tamanho;
+
+    public void inserirInicio(Peca peca){
+        No no = new No();
+        no.peca = peca;
+        no.anterior = null;
+        no.proximo = inicio;
+        if(inicio != null){
+            inicio.anterior = no;
+        }
+        inicio = no;
+
+        if(tamanho == 0){
+          fim = inicio;
+        }
+        tamanho++;
+    }
+
+    public Peca retirarInicio() {
+        if (inicio == null) {
+            return null;
+        }
+        Peca out = inicio.peca;
+        inicio = inicio.proximo;
+        if (inicio != null) {
+            inicio.anterior = null;
+        } else {
+            fim = null;
+        }
+        tamanho--;
+        return out;
+    }
+
+    public No inserirFim(Peca peca){
+        No no = new No();
+        no.peca = peca;
+        no.proximo = null;
+        no.anterior = fim;
+        if(fim != null){
+            fim.proximo = no;
+        }
+        fim = no;
+        if(tamanho == 0){
+            inicio = fim;
+        }
+        tamanho++;
+
+        return no;
+    }
+
+
+    public Peca retirarFim() {
+        if(fim == null) {
+            return null;
+        }
+        Peca out = fim.peca;
+        fim = fim.anterior;
+        if(fim != null) {
+            fim.proximo = null;
+        }else {
+            inicio = null;
+        }
+        tamanho--;
+        return out;
+    }
+
+
+    public void inserirMeio(int indice, Peca peca) {
+        if(indice <= 0) {
+            inserirInicio(peca);
+        }else if(indice >= tamanho) {
+            inserirFim(peca);
+        }else {
+            No local = inicio;
+            for(int i = 0; i < indice; i++) {
+                local = local.proximo;
+            }
+            No no = new No();
+            no.peca = peca;
+            no.anterior = local;
+            no.proximo = local.proximo;
+            local.proximo = no;
+            no.proximo.anterior = no;
+            tamanho++;
+        }
+    }
+
+
+    public Peca retirarMeio(int indice) {
+        if(indice < 0 || indice >= tamanho || inicio == null) {
+            return null;
+        }else if(indice == 0) {
+            return retirarInicio();
+        }else if(indice == tamanho -1) {
+            return retirarFim();
+        }
+        No local = inicio;
+        for(int i = 0; i < indice; i++) {
+            local = local.proximo;
+        }
+        if(local.anterior != null) {
+            local.anterior.proximo = local.proximo;
+        }
+        if(local.proximo != null) {
+            local.proximo.anterior = local.anterior;
+        }
+        tamanho--;
+        return local.peca;
+    }
+
+
+    public Peca gerarPeca() {
+        Peca peca = new Peca();
+        peca.lado1 = i;
+        peca.lado2 = j;
+        j++;
+        if(j > i) {
+            i--;
+            j = 0;
+        }
+        return peca;
+    }
+
+
+    public void imprimirPecas(ListaDupla listaOBJ) {
+        No novoNo = listaOBJ.inicio;
+        while(novoNo.proximo != null) {
+            System.out.print("[" + novoNo.peca.lado1 + "|" + novoNo.peca.lado2 + "] - ");
+            novoNo = novoNo.proximo;
+        }
+    }
+
+    public Peca pecaNaPosicao(int posicao) {
+        No noDaVez = inicio;
+        int count = 0;
+        while(noDaVez != null) {
+
+            if(count == posicao) {
+                return noDaVez.peca;
+            }
+            noDaVez = noDaVez.proximo;
+            count++;
+        }
+        return null;
+    }
+}
