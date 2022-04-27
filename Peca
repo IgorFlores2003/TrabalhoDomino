@@ -1,0 +1,10 @@
+package Domino.io;
+
+public class Peca {
+
+    public int lado1;
+    public int lado2;
+
+
+}
+
